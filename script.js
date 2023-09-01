@@ -1,3 +1,28 @@
+// Function to check if both input fields have content
+function bothInputsHaveContent() {
+  const number1 = document.getElementById("number1").value;
+  const number2 = document.getElementById("number2").value;
+  return number1.trim() !== "" && number2.trim() !== "";
+}
+
+// Function to handle Enter key press
+function handleKeyPress(event) {
+  if (event.key === "Enter") {
+    event.preventDefault(); // Prevent the default Enter key behavior
+    if (bothInputsHaveContent()) {
+      performArithmetic();
+    } else {
+      const arithmeticOutput = document.getElementById("arithmeticOutput");
+      arithmeticOutput.style.color = "red";
+      arithmeticOutput.textContent = "Both input fields must have content.";
+    }
+  }
+}
+
+// Attach the handleKeyPress function to the input fields
+document.getElementById("number1").addEventListener("keydown", handleKeyPress);
+document.getElementById("number2").addEventListener("keydown", handleKeyPress);
+
 function convertBase(number, fromBase, toBase) {
   let error = null;
   let result = null;
@@ -42,7 +67,6 @@ function convertBase(number, fromBase, toBase) {
         } else {
           // TO HEXADECIMAL
           result = _ARITHMETIC.toHex(parseInt(number, 10), 4, fromBase);
-          console.log({ result });
           if (result === "Invalid input. Please provide a valid input number.")
             return { value: null, error: result };
         }
@@ -88,32 +112,58 @@ function convertNumber() {
 }
 
 function performArithmetic() {
+  console.log("performArithmetic called");
+  if (!bothInputsHaveContent()) {
+    const arithmeticOutput = document.getElementById("arithmeticOutput");
+    arithmeticOutput.style.color = "red";
+    arithmeticOutput.textContent = "Both input fields must have content.";
+    return;
+  }
+
   const base1 = document.getElementById("base1").value;
   const base2 = document.getElementById("base2").value;
   const number1 = document.getElementById("number1").value;
   const number2 = document.getElementById("number2").value;
   const operation = document.getElementById("operation").value;
-
   let convertedNumber2 = number2;
   if (base1 !== base2) {
-    // Convert the second number to the base of the first number
     convertedNumber2 = convertBase(number2, base2, base1).value;
   }
-
-  // TODO: Remove log
-  console.log({ convertedNumber2 });
-
   let result = null;
-
   if (operation === "add") {
-    // Use the new addBinary function for both integer and fractional addition
     result = addBase(number1, convertedNumber2, base1);
   } else if (operation === "multiply") {
     result = multiplyBase(number1, convertedNumber2, base1);
   }
-
-  document.getElementById("arithmeticOutput").innerHTML = `Result: ${result}`;
+  const arithmeticOutput = document.getElementById("arithmeticOutput");
+  arithmeticOutput.style.color = "black";
+  arithmeticOutput.textContent = `Result: ${result}`;
 }
+
+// function performArithmetic() {
+//   const base1 = document.getElementById("base1").value;
+//   const base2 = document.getElementById("base2").value;
+//   const number1 = document.getElementById("number1").value;
+//   const number2 = document.getElementById("number2").value;
+//   const operation = document.getElementById("operation").value;
+
+//   let convertedNumber2 = number2;
+//   if (base1 !== base2) {
+//     // Convert the second number to the base of the first number
+//     convertedNumber2 = convertBase(number2, base2, base1).value;
+//   }
+
+//   let result = null;
+
+//   if (operation === "add") {
+//     // Use the new addBinary function for both integer and fractional addition
+//     result = addBase(number1, convertedNumber2, base1);
+//   } else if (operation === "multiply") {
+//     result = multiplyBase(number1, convertedNumber2, base1);
+//   }
+
+//   document.getElementById("arithmeticOutput").innerHTML = `Result: ${result}`;
+// }
 
 function addBase(number1, number2, base) {
   let baseNum = 0;
@@ -130,21 +180,7 @@ function addBase(number1, number2, base) {
       break;
   }
 
-  const num1 = parseInt(number1, baseNum);
-  const num2 = parseInt(number2, baseNum);
-
-  if (isNaN(num1) || isNaN(num2)) {
-    return "Error: Invalid input or base.";
-  }
-
-  switch (base) {
-    case "BIN":
-      return _ARITHMETIC.addBinary(number1, number2, baseNum);
-    case "HEX":
-      return _ARITHMETIC.addHex(number1, number2, baseNum);
-    case "DEC":
-      return (num1 + num2).toString(baseNum);
-  }
+  return _ARITHMETIC.addNumbers(number1, number2, baseNum);
 }
 
 function multiplyBase(number1, number2, base) {
@@ -162,22 +198,5 @@ function multiplyBase(number1, number2, base) {
       break;
   }
 
-  const num1 = parseInt(number1, baseNum);
-  const num2 = parseInt(number2, baseNum);
-
-  // TODO: Remove log
-  console.log({ num1, num2 });
-
-  if (isNaN(num1) || isNaN(num2)) {
-    return "Error: Invalid input or base.";
-  }
-
-  switch (base) {
-    case "BIN":
-      return _ARITHMETIC.multiplyBinary(number1, number2, baseNum);
-    case "HEX":
-      return _ARITHMETIC.multiplyHex(number1, number2, baseNum);
-    case "DEC":
-      return (num1 * num2).toString(baseNum);
-  }
+  return _ARITHMETIC.multiplyNumbers(number1, number2, baseNum);
 }

@@ -2,11 +2,26 @@ class _ARITHMETIC {
   // ------------------------------------------------------------
   constructor() {}
 
-  // TODO: Refactor to use 1 addition function for all bases
-  // TODO: Refactor to use 1 multiplication function for all bases
-
   // --------------------ADDITION METHODS------------------------
   // ------------------------------------------------------------
+  static addNumbers = (a, b, base) => {
+    const num1 = parseInt(a, base);
+    const num2 = parseInt(b, base);
+
+    switch (base) {
+      case 2:
+        return _ARITHMETIC.addBinary(a, b, base);
+      case 16:
+        return _ARITHMETIC.addHex(a, b, base);
+      case 10:
+        // Check to make sure the inputs are valid numbers
+        if (isNaN(a) || isNaN(b)) {
+          return "Error: Invalid input or base.";
+        }
+        return (num1 + num2).toString(base);
+    }
+  };
+
   static addBinary = (a, b, base) => {
     // Split the binary numbers into integer and fractional parts
     let [intPart1, fracPart1] = a.split(".");
@@ -82,6 +97,24 @@ class _ARITHMETIC {
 
   // -----------------MULTIPLICATION METHODS---------------------
   // ------------------------------------------------------------
+  static multiplyNumbers = (a, b, base) => {
+    const num1 = parseInt(a, base);
+    const num2 = parseInt(b, base);
+
+    switch (base) {
+      case 2:
+        return _ARITHMETIC.multiplyBinary(a, b, base);
+      case 16:
+        return _ARITHMETIC.multiplyHex(a, b, base);
+      case 10:
+        // Check to make sure the inputs are valid numbers
+        if (isNaN(a) || isNaN(b)) {
+          return "Error: Invalid input or base.";
+        }
+        return (num1 * num2).toString(base);
+    }
+  };
+
   static multiplyBinary = (a, b, base) => {
     // Convert binary strings to decimal numbers
     const decimal1 = parseInt(a, base);
