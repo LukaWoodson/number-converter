@@ -4,7 +4,8 @@ class _ARITHMETIC {
 
   // TODO: Refactor to use 1 addition function for all bases
   // TODO: Refactor to use 1 multiplication function for all bases
-  // --------------------- BINARY -------------------------------
+
+  // --------------------ADDITION METHODS------------------------
   // ------------------------------------------------------------
   static addBinary = (a, b, base) => {
     // Split the binary numbers into integer and fractional parts
@@ -65,6 +66,29 @@ class _ARITHMETIC {
     return result.toString(base); // Convert the result to the specified base
   };
 
+  static addHex = (a, b, base) => {
+    // Convert hexadecimal strings to decimal integers
+    const decimal1 = parseInt(a, base);
+    const decimal2 = parseInt(b, base);
+
+    // Add the decimal values
+    const sumDecimal = decimal1 + decimal2;
+
+    // Convert the sum back to hexadecimal
+    const sumHexadecimal = sumDecimal.toString(base);
+
+    return sumHexadecimal;
+  };
+
+  // -----------------MULTIPLICATION METHODS---------------------
+  // ------------------------------------------------------------
+  static multiplyBinary = (a, b, base) => {
+    // code here
+  };
+
+  static multiplyHex = (a, b, base) => {
+    // code here
+  };
   // -------------------CONVERSION METHODS-----------------------
   // ------------------------------------------------------------
   /**
