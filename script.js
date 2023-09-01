@@ -3,56 +3,73 @@ function reverse(input) {
 }
 
 function convertBase(number, fromBase, toBase) {
-  if (fromBase === toBase) {
-    return { value: number, error: null };
-  }
-
   let error = null;
+  let result = null;
 
-  // TODO: Refactor to use a switch statement
-  // TODO: Refactor to make sure user can still convert from dec to hex and vice versa as long as the input equals an integer
-  if (fromBase === "DEC") {
-    number = parseFloat(number);
-    if (isNaN(number)) {
-      error = "Error: Invalid input.";
-    } else if (toBase === "DEC" || toBase === "HEX") {
-      error = "Error: Cannot convert float to DEC or HEX.";
+  // Check if the bases are the same, no conversion needed
+  if (fromBase === toBase) {
+    error = "Error: Cannot convert to the same base.";
+  } else {
+    switch (fromBase) {
+      case "BIN": // ------FROM BINARY ------
+        if (toBase === "DEC") {
+          // TO DECIMAL
+          result = _ARITHMETIC.toDecimal(number, 4, fromBase);
+          if (result === "Invalid binary input.")
+            return { value: null, error: result };
+        } else {
+          // TO HEXADECIMAL
+          result = _ARITHMETIC.toHex(number, 4, fromBase);
+          if (result === "Invalid binary input.")
+            return { value: null, error: result };
+        }
+        break;
+      case "HEX": // ------FROM HEXADECIMAL ------
+        if (toBase === "DEC") {
+          // TO DECIMAL
+          result = _ARITHMETIC.toDecimal(number, 4, fromBase);
+          if (result === "Invalid hexadecimal input.")
+            return { value: null, error: result };
+        } else {
+          // TO BINARY
+          result = _ARITHMETIC.toBinary(number, 4, fromBase);
+          if (result === "Invalid hexadecimal input.")
+            return { value: null, error: result };
+        }
+        break;
+      case "DEC": // ------FROM DECIMAL ------
+        if (toBase === "BIN") {
+          // TO BINARY
+          result = _ARITHMETIC.toBinary(number, 4, fromBase);
+          if (result === "Invalid input. Please provide a valid input number.")
+            return { value: null, error: result };
+        } else {
+          // TO HEXADECIMAL
+          result = _ARITHMETIC.toHex(number, 4, fromBase);
+          if (result === "Invalid input. Please provide a valid input number.")
+            return { value: null, error: result };
+        }
+        break;
+      case "FLOAT": // ------FROM FLOAT ------
+        if (toBase === "DEC" || toBase === "HEX") {
+          // TO DECIMAL OR HEXADECIMAL
+          error = "Error: Cannot convert float to DEC or HEX.";
+        } else {
+          // TO BINARY
+          result = _ARITHMETIC.toBinary(number, 4, fromBase);
+          if (result === "Invalid input. Please provide a valid input number.")
+            return { value: null, error: result };
+        }
+        break;
     }
-  } else if (fromBase === "BIN") {
-    // Pad with zeros to ensure it's a multiple of 4 bits
-    while (number.length % 4 !== 0) {
-      number = "0" + number;
-    }
-    number = parseInt(number, 2);
-  } else if (fromBase === "HEX") {
-    // Convert from hex to decimal first
-    number = parseInt(number, 16);
-  } else if (fromBase === "FLOAT" && (toBase === "DEC" || toBase === "HEX")) {
-    error = "Error: Cannot convert float to DEC or HEX.";
   }
 
+  // If an error occurred, return it
   if (error !== null) {
     return { value: null, error };
   }
 
-  if (toBase === "BIN") {
-    // Convert to binary and pad with leading zeros to be a multiple of 4 bits
-    return {
-      value: _ARITHMETIC.decimalToBinary(number, 4),
-      error: null,
-    };
-  } else if (toBase === "HEX") {
-    // Convert to hexadecimal and pad with zeros to ensure it's a multiple of 4 bits
-    return {
-      value: number
-        .toString(16)
-        .toUpperCase()
-        .padStart(Math.ceil(number.toString(16).length / 4) * 4, "0"),
-      error: null,
-    };
-  } else {
-    return { value: number.toString(), error: null };
-  }
+  return { value: result, error: null };
 }
 
 function convertNumber() {
