@@ -83,11 +83,36 @@ class _ARITHMETIC {
   // -----------------MULTIPLICATION METHODS---------------------
   // ------------------------------------------------------------
   static multiplyBinary = (a, b, base) => {
-    // code here
+    // Convert binary strings to decimal numbers
+    const decimal1 = parseInt(a, base);
+    const decimal2 = parseInt(b, base);
+
+    // Multiply the decimal numbers
+    const resultDecimal = decimal1 * decimal2;
+
+    // Convert the result back to binary and pad to 4 bits
+    let resultBinary = resultDecimal.toString(base);
+
+    // Pad with leading zeros to ensure 8 bits
+    while (resultBinary.length % base !== 0) {
+      resultBinary = "0" + resultBinary;
+    }
+
+    return resultBinary;
   };
 
   static multiplyHex = (a, b, base) => {
-    // code here
+    // Convert hexadecimal strings to decimal numbers
+    const decimal1 = parseInt(a, base);
+    const decimal2 = parseInt(b, base);
+
+    // Multiply the decimal numbers
+    const resultDecimal = decimal1 * decimal2;
+
+    // Convert the result back to hexadecimal
+    const resultHexadecimal = resultDecimal.toString(base).toUpperCase();
+
+    return resultHexadecimal;
   };
   // -------------------CONVERSION METHODS-----------------------
   // ------------------------------------------------------------
