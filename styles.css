@@ -6,10 +6,11 @@ body {
 
 h1 {
     color: #333;
+    margin-block: 0.19rem;
 }
 
 .container {
-    width: 50%;
+    width: 30%;
     margin: 0 auto;
     padding: 20px;
     background-color: #f4f4f4;

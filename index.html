@@ -10,72 +10,63 @@
 
 <body>
     <h1>Number Conversion</h1>
-    <div class="container">
-        <label for="fromType">Enter the type of number:</label>
-        <select id="fromType">
-            <option value="DEC">DEC</option>
-            <option value="BIN">BIN</option>
-            <option value="HEX">HEX</option>
-            <option value="FLOAT">FLOAT</option>
-        </select>
-
-        <label for="toType">Enter the type of number to convert to:</label>
-        <select id="toType">
-            <option value="DEC">DEC</option>
-            <option value="BIN">BIN</option>
-            <option value="HEX">HEX</option>
-        </select>
-
-        <div>
-            <label for="numberInput">Enter the number:</label>
-            <input type="text" id="numberInput" onkeydown="if(event.keyCode==13) convertNumber()">
+    <div class="section">
+        <div class="container">
+            <label for="fromType">Enter the type of number:</label>
+            <select id="fromType">
+                <option value="DEC">DEC</option>
+                <option value="BIN">BIN</option>
+                <option value="HEX">HEX</option>
+                <option value="FLOAT">FLOAT</option>
+            </select>
+            <label for="toType">Enter the type of number to convert to:</label>
+            <select id="toType">
+                <option value="DEC">DEC</option>
+                <option value="BIN">BIN</option>
+                <option value="HEX">HEX</option>
+            </select>
+            <div class="input-wrapper">
+                <label for="numberInput">Enter the number:</label>
+                <input type="text" id="numberInput" onkeydown="if(event.keyCode==13) convertNumber()">
+            </div>
+            <button onclick="convertNumber()">Convert</button>
+            <div id="conversionOutput"></div>
         </div>
-
-        <button onclick="convertNumber()">Convert</button>
-
-        <div id="conversionOutput"></div>
     </div>
 
     <h1>Arithmetic</h1>
-    <div class="container">
-        <label for="base1">Enter the base of the first number:</label>
-        <select id="base1">
-            <option value="DEC">DEC</option>
-            <option value="BIN">BIN</option>
-            <option value="HEX">HEX</option>
-        </select>
-
-        <div>
-            <label for="number1">Enter the first number:</label>
-            <input type="text" id="number1">
+    <div class="section">
+        <div class="container">
+            <label for="base1">Enter the base of the first number:</label>
+            <select id="base1">
+                <option value="DEC">DEC</option>
+                <option value="BIN">BIN</option>
+                <option value="HEX">HEX</option>
+            </select>
+            <div class="input-wrapper">
+                <label for="number1">Enter the first number:</label>
+                <input type="text" id="number1">
+            </div>
+            <label for="base2">Enter the base of the second number:</label>
+            <select id="base2">
+                <option value="DEC">DEC</option>
+                <option value="BIN">BIN</option>
+                <option value="HEX">HEX</option>
+            </select>
+            <div class="input-wrapper">
+                <label for="number2">Enter the second number:</label>
+                <input type="text" id="number2">
+            </div>
+            <label for="operation">Select operation:</label>
+            <select id="operation">
+                <option value="add">Add</option>
+                <option value="multiply">Multiply</option>
+            </select>
+            <button onclick="performArithmetic()">Calculate</button>
+            <div id="arithmeticOutput"></div>
         </div>
-
-        <label for="base2">Enter the base of the second number:</label>
-        <select id="base2">
-            <option value="DEC">DEC</option>
-            <option value="BIN">BIN</option>
-            <option value="HEX">HEX</option>
-        </select>
-
-        <div>
-            <label for="number2">Enter the second number:</label>
-            <input type="text" id="number2">
-        </div>
-
-        <label for="operation">Select operation:</label>
-        <select id="operation">
-            <option value="add">Add</option>
-            <option value="multiply">Multiply</option>
-        </select>
-
-        <button onclick="performArithmetic()">Calculate</button>
-
-        <div id="arithmeticOutput"></div>
     </div>
-
-    <script src="_ARITHMETIC.js"></script>
+    <script src="_NUMBERS.js"></script>
     <script src="script.js" defer></script>
-
 </body>
-
 </html>

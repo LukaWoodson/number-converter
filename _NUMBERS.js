@@ -1,5 +1,4 @@
-class _ARITHMETIC {
-  // ------------------------------------------------------------
+class _NUMBERS {
   constructor() {}
 
   // --------------------ADDITION METHODS------------------------
@@ -10,9 +9,9 @@ class _ARITHMETIC {
 
     switch (base) {
       case 2:
-        return _ARITHMETIC.addBinary(a, b, base);
+        return _NUMBERS.addBinary(a, b, base);
       case 16:
-        return _ARITHMETIC.addHex(a, b, base);
+        return _NUMBERS.addHex(a, b, base);
       case 10:
         // Check to make sure the inputs are valid numbers
         if (isNaN(a) || isNaN(b)) {
@@ -103,9 +102,9 @@ class _ARITHMETIC {
 
     switch (base) {
       case 2:
-        return _ARITHMETIC.multiplyBinary(a, b, base);
+        return _NUMBERS.multiplyBinary(a, b, base);
       case 16:
-        return _ARITHMETIC.multiplyHex(a, b, base);
+        return _NUMBERS.multiplyHex(a, b, base);
       case 10:
         // Check to make sure the inputs are valid numbers
         if (isNaN(a) || isNaN(b)) {
@@ -157,18 +156,16 @@ class _ARITHMETIC {
    * @returns
    */
   static toBinary = (input, k_prec, fromBase) => {
-    // Decimal to Binary
-    if (fromBase === "DEC" || fromBase === "FLOAT") {
-      if (typeof input !== "number") {
-        return "Invalid input. Please provide a valid input number.";
-      }
+    // Helper function to pad binary numbers
+    const padBinary = (binary, length) => binary.padStart(length, "0");
 
-      if (isNaN(input) || input < 0) {
+    if (fromBase === "DEC" || fromBase === "FLOAT") {
+      if (typeof input !== "number" || isNaN(input) || input < 0) {
         return "Invalid input. Please provide a valid input number.";
       }
 
       if (input === 0) {
-        return "0".padStart(k_prec, "0"); // Ensure at least k_prec bits for zero
+        return padBinary("0", k_prec); // Ensure at least k_prec bits for zero
       }
 
       // Convert the integral part to binary (left side of the input point)
@@ -184,10 +181,7 @@ class _ARITHMETIC {
 
       if (fractional === 0) {
         // If no fractional part, pad with leading zeros to be a multiple of k_prec bits
-        while (integralBinary.length % k_prec !== 0) {
-          integralBinary = "0" + integralBinary;
-        }
-        return integralBinary;
+        return padBinary(integralBinary, k_prec);
       } else {
         // Convert the fractional part to binary (right side of the input point)
         let fractionalBinary = ".";
@@ -205,18 +199,13 @@ class _ARITHMETIC {
         return integralBinary + fractionalBinary;
       }
     } else if (fromBase === "HEX") {
-      // Hexadecimal to Binary
       // Check if the string input represents a hexadecimal value
       if (/^[0-9A-Fa-f]+$/.test(input)) {
         // Convert hex to binary by parsing it as an integer and converting to binary string
         let binary = parseInt(input, 16).toString(2);
 
         // Ensure the binary string has a length that is a multiple of k_prec bits
-        while (binary.length % k_prec !== 0) {
-          binary = "0" + binary;
-        }
-
-        return binary.padStart(k_prec, "0");
+        return padBinary(binary, k_prec);
       } else {
         return "Invalid hexadecimal input.";
       }
@@ -231,27 +220,28 @@ class _ARITHMETIC {
    * @returns
    */
   static toHex = (input, k_prec, fromBase) => {
-    // Binary to Hexadecimal
+    // Helper function to convert binary to hexadecimal
+    const binaryToHex = (binary) => {
+      let hex = "";
+      for (let i = 0; i < binary.length; i += k_prec) {
+        const nibble = binary.substr(i, k_prec);
+        hex += parseInt(nibble, 2).toString(16).toUpperCase();
+      }
+      return hex;
+    };
+
     if (fromBase === "BIN") {
       if (!/^[01]+$/.test(input)) {
         return "Invalid binary input.";
       }
 
-      // Ensure the binary string length is a multiple of k_prec by adding leading zeros if needed
+      // Ensure the binary string length is a multiple of k_prec (each hex digit corresponds to k_prec bits)
       const padLength =
         input.length % k_prec === 0 ? 0 : k_prec - (input.length % k_prec);
       const paddedInput = "0".repeat(padLength) + input;
 
-      // Convert binary to hexadecimal by grouping into k_prec-bit segments and converting each to hex
-      let hexadecimalStr = "";
-      for (let i = 0; i < paddedInput.length; i += k_prec) {
-        const binarySegment = paddedInput.substr(i, k_prec);
-        const decimalValue = parseInt(binarySegment, 2);
-        const hexDigit = decimalValue.toString(16).toUpperCase(); // Convert to uppercase
-        hexadecimalStr += hexDigit;
-      }
-
-      return hexadecimalStr;
+      // Convert binary to hexadecimal using the helper function
+      return binaryToHex(paddedInput);
     } else if (fromBase === "DEC") {
       if (typeof input !== "number") {
         return "Invalid input. Please provide a valid input number.";
@@ -270,26 +260,19 @@ class _ARITHMETIC {
    * @returns
    */
   static toDecimal = (input, k_prec, fromBase) => {
-    // Binary to Decimal
-    let decimalValue;
-
     if (fromBase === "BIN") {
       // Check if the input is a valid binary string
       if (!/^[01]+$/.test(input)) {
         return "Invalid binary input.";
       }
 
-      // Remove leading zeros from the binary string
-      input = input.replace(/^0+/, "");
+      // Parse the binary string to decimal
+      let decimalValue = parseInt(input, 2);
 
-      // Split the binary string into integer and fractional parts
-      const [integerPart, fractionalPart] = input.split(".");
-
-      // Convert the integer part to decimal
-      decimalValue = parseInt(integerPart, 2);
-
-      // Convert the fractional part to decimal if it exists
-      if (fractionalPart) {
+      // Handle fractional part if it exists
+      const fractionalIndex = input.indexOf(".");
+      if (fractionalIndex !== -1) {
+        const fractionalPart = input.substring(fractionalIndex + 1);
         let fractionalDecimal = 0;
         for (let i = 0; i < fractionalPart.length; i++) {
           fractionalDecimal +=
@@ -297,18 +280,20 @@ class _ARITHMETIC {
         }
         decimalValue += fractionalDecimal;
       }
-    } else {
-      // Hexadecimal to Decimal
+
+      return decimalValue.toString();
+    } else if (fromBase === "HEX") {
       // Check if the input is a valid hexadecimal string
       if (!/^[0-9A-Fa-f]+$/.test(input)) {
         return "Invalid hexadecimal input.";
       }
-      // Convert hexadecimal to decimal
-      decimalValue = parseInt(input, 16);
-    }
 
-    // Convert to a string to handle the decimal places and return
-    return decimalValue.toString();
+      // Parse the hexadecimal string to decimal
+      const decimalValue = parseInt(input, 16);
+      return decimalValue.toString();
+    } else {
+      return "Unsupported input base.";
+    }
   };
 
   // ------------------------------------------------------------
