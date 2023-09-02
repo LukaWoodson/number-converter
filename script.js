@@ -56,8 +56,9 @@ function convertBase(number, fromBase, toBase) {
       }
       break;
     case "FLOAT":
+      const floatNumber = parseFloat(number);
       if (toBase === "BIN") {
-        result = Numbers.toBinary(number, 4, fromBase);
+        result = Numbers.toBinary(floatNumber, 4, fromBase);
       } else {
         error = "Error: Cannot convert float to DEC or HEX.";
       }
