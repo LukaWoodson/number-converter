@@ -35,29 +35,29 @@ function convertBase(number, fromBase, toBase) {
   switch (fromBase) {
     case "BIN":
       if (toBase === "DEC") {
-        result = _NUMBERS.toDecimal(number, 4, fromBase);
+        result = Numbers.toDecimal(number, 4, fromBase);
       } else if (toBase === "HEX") {
-        result = _NUMBERS.toHex(number, 4, fromBase);
+        result = Numbers.toHex(number, 4, fromBase);
       }
       break;
     case "HEX":
       if (toBase === "DEC") {
-        result = _NUMBERS.toDecimal(number, 4, fromBase);
+        result = Numbers.toDecimal(number, 4, fromBase);
       } else if (toBase === "BIN") {
-        result = _NUMBERS.toBinary(number, 4, fromBase);
+        result = Numbers.toBinary(number, 4, fromBase);
       }
       break;
     case "DEC":
       const decimalNumber = parseInt(number, 10);
       if (toBase === "BIN") {
-        result = _NUMBERS.toBinary(decimalNumber, 4, fromBase);
+        result = Numbers.toBinary(decimalNumber, 4, fromBase);
       } else if (toBase === "HEX") {
-        result = _NUMBERS.toHex(decimalNumber, 4, fromBase);
+        result = Numbers.toHex(decimalNumber, 4, fromBase);
       }
       break;
     case "FLOAT":
       if (toBase === "BIN") {
-        result = _NUMBERS.toBinary(number, 4, fromBase);
+        result = Numbers.toBinary(number, 4, fromBase);
       } else {
         error = "Error: Cannot convert float to DEC or HEX.";
       }
@@ -156,7 +156,7 @@ function addBase(number1, number2, base) {
       break;
   }
 
-  return _NUMBERS.addNumbers(number1, number2, baseNum);
+  return Numbers.addNumbers(number1, number2, baseNum);
 }
 
 function multiplyBase(number1, number2, base) {
@@ -174,5 +174,5 @@ function multiplyBase(number1, number2, base) {
       break;
   }
 
-  return _NUMBERS.multiplyNumbers(number1, number2, baseNum);
+  return Numbers.multiplyNumbers(number1, number2, baseNum);
 }

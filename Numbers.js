@@ -1,4 +1,4 @@
-class _NUMBERS {
+class Numbers {
   constructor() {}
 
   // --------------------ADDITION METHODS------------------------
@@ -9,9 +9,9 @@ class _NUMBERS {
 
     switch (base) {
       case 2:
-        return _NUMBERS.addBinary(a, b, base);
+        return Numbers.addBinary(a, b, base);
       case 16:
-        return _NUMBERS.addHex(a, b, base);
+        return Numbers.addHex(a, b, base);
       case 10:
         // Check to make sure the inputs are valid numbers
         if (isNaN(a) || isNaN(b)) {
@@ -102,9 +102,9 @@ class _NUMBERS {
 
     switch (base) {
       case 2:
-        return _NUMBERS.multiplyBinary(a, b, base);
+        return Numbers.multiplyBinary(a, b, base);
       case 16:
-        return _NUMBERS.multiplyHex(a, b, base);
+        return Numbers.multiplyHex(a, b, base);
       case 10:
         // Check to make sure the inputs are valid numbers
         if (isNaN(a) || isNaN(b)) {
