@@ -182,6 +182,15 @@ class Numbers {
       // Combine the integral binary part
       return padBinary(integralBinary, padLength);
     } else if (fromBase === "FLOAT") {
+      // Helper function to calculate the binary representation of a binary section
+      const calcBinary = (binary, bits) => {
+        let convertedBinary = "";
+        for (let i = bits - 1; i >= 0; i--) {
+          convertedBinary += (binary >> i) & 1 ? "1" : "0";
+        }
+        return convertedBinary;
+      };
+
       // Extract sign, exponent, and mantissa
       const signBit = input < 0 ? 1 : 0;
       const absValue = Math.abs(input);
@@ -192,21 +201,13 @@ class Numbers {
       const biasedExponent = exponent + 127;
 
       // Convert mantissa to binary
-      let convertedMantissa = "";
-      let mBits = 23;
-      for (let i = mBits - 1; i >= 0; i--) {
-        convertMantissa +=
-          (Math.round(normalizedMantissa * Math.pow(2, 23)) >> i) & 1
-            ? "1"
-            : "0";
-      }
+      const convertedMantissa = calcBinary(
+        Math.round(normalizedMantissa * Math.pow(2, 23)),
+        23
+      );
 
       // Convert exponent to binary
-      let convertedExponent = "";
-      let eBits = 8;
-      for (let k = eBits - 1; k >= 0; k--) {
-        convertedExponent += (biasedExponent >> k) & 1 ? "1" : "0";
-      }
+      const convertedExponent = calcBinary(biasedExponent, 8);
 
       // Construct IEEE 754 representation
       const ieee754Representation =
@@ -277,7 +278,7 @@ class Numbers {
    * @param {string} fromBase
    * @returns
    */
-  static toDecimal = (input, k_prec, fromBase) => {
+  static toDecimal = (input, fromBase) => {
     if (fromBase === "BIN") {
       // Check if the input is a valid binary string
       if (!/^[01]+$/.test(input)) {
