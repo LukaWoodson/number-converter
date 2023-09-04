@@ -148,8 +148,6 @@ class Numbers {
   };
   // -------------------CONVERSION METHODS-----------------------
   // ------------------------------------------------------------
-  static fromFloat(input) {}
-
   /**
    * Converts a decimal number or hexadecimal string to binary. Takes in a decimal number or hexadecimal string for input, the precision for the fractional part (if applicable), and the base of the input.
    * @param {number || string} input
@@ -177,6 +175,10 @@ class Numbers {
         integralBinary = (integral % 2) + integralBinary;
         integral = Math.floor(integral / 2);
       }
+
+      // Pad the integral binary part to ensure it's a multiple of 4 bits
+      const padLength = Math.ceil(integralBinary.length / 4) * 4;
+      integralBinary = padBinary(integralBinary, padLength);
 
       // Combine the integral binary part
       return integralBinary;
@@ -249,72 +251,6 @@ class Numbers {
   //       integralBinary = (integral % 2) + integralBinary;
   //       integral = Math.floor(integral / 2);
   //     }
-
-  //     // ------------------------------------------------------------
-  //     // FLOATING POINT CONVERSION
-  //     const signBit = input < 0 ? 1 : 0;
-
-  //     input = Math.abs(input);
-
-  //     let exponent = 0;
-  //     let normalizedValue = input;
-
-  //     // Normalize the float value and calculate the exponent
-  //     while (normalizedValue >= 2) {
-  //       normalizedValue /= 2;
-  //       exponent++;
-  //     }
-  //     while (normalizedValue < 1 && normalizedValue !== 0) {
-  //       normalizedValue *= 2;
-  //       exponent--;
-  //     }
-
-  //     // Calculate the binary representation of the exponent (bias 127 for single-precision)
-  //     const biasedExponent = exponent + 127;
-
-  //     // Convert the fractional part to binary with exactly 23 bits
-  //     const fractionalBinary = [];
-  //     for (let i = 0; i < 23; i++) {
-  //       fractional *= 2;
-  //       fractionalBinary.push(Math.floor(fractional));
-  //       fractional = fractional - Math.floor(fractional);
-  //     }
-
-  //     // Combine all parts to create the IEEE 754 floating-point binary representation
-  //     const binaryString =
-  //       signBit.toString(2) +
-  //       " " +
-  //       padBinary(biasedExponent.toString(2), 8) +
-  //       " " +
-  //       fractionalBinary.join("");
-
-  //     return binaryString;
-  //   }
-  //   // // Convert the fractional part to binary (right side of the input point)
-  //   // let fractionalBinary = ".";
-  //   // let precision = 0;
-  //   // while (precision < k_prec) {
-  //   //   // You can adjust the precision here (e.g., k_prec input places)
-  //   //   fractional *= 2;
-  //   //   fractionalBinary += Math.floor(fractional);
-  //   //   fractional -= Math.floor(fractional);
-  //   //   precision++;
-  //   // }
-  //   // // Combine the integral and fractional binary parts
-  //   // return integralBinary + fractionalBinary;
-  //   else if (fromBase === "HEX") {
-  //     // Check if the string input represents a hexadecimal value
-  //     if (/^[0-9A-Fa-f]+$/.test(input)) {
-  //       // Convert hex to binary by parsing it as an integer and converting to binary string
-  //       let binary = parseInt(input, 16).toString(2);
-
-  //       // Ensure the binary string has a length that is a multiple of k_prec bits
-  //       return padBinary(binary, k_prec);
-  //     } else {
-  //       return "Invalid hexadecimal input.";
-  //     }
-  //   }
-  // };
 
   /**
    * Converts a binary string or decimal number to hexadecimal. Takes in a binary string or decimal number for input, the precision for the fractional part (if applicable), and the base of the input.
