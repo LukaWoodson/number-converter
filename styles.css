@@ -15,7 +15,7 @@ h1 {
 
 .container {
     width: 100%;
-    min-width: 30%;
+    max-width: 30rem;
     margin: 0 auto;
     padding: 20px;
     background-color: #f4f4f4;
