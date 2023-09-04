@@ -286,18 +286,21 @@ class Numbers {
       }
 
       // Parse the binary string to decimal
-      let decimalValue = parseInt(input, 2);
+      let decimalValue = 0;
+      let isNegative = false;
 
-      // Handle fractional part if it exists
-      const fractionalIndex = input.indexOf(".");
-      if (fractionalIndex !== -1) {
-        const fractionalPart = input.substring(fractionalIndex + 1);
-        let fractionalDecimal = 0;
-        for (let i = 0; i < fractionalPart.length; i++) {
-          fractionalDecimal +=
-            parseInt(fractionalPart[i], 2) / Math.pow(2, i + 1);
-        }
-        decimalValue += fractionalDecimal;
+      // Check if the binary number is negative
+      if (input[0] === "-") {
+        isNegative = true;
+        input = input.slice(1);
+      }
+
+      for (let i = 0; i < input.length; i++) {
+        decimalValue = decimalValue * 2 + parseInt(input[i], 2);
+      }
+
+      if (isNegative) {
+        decimalValue = -decimalValue;
       }
 
       return decimalValue.toString();

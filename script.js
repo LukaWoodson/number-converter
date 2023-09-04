@@ -35,14 +35,14 @@ function convertBase(number, fromBase, toBase) {
   switch (fromBase) {
     case "BIN":
       if (toBase === "DEC") {
-        result = Numbers.toDecimal(number, 4, fromBase);
+        result = Numbers.toDecimal(number, fromBase);
       } else if (toBase === "HEX") {
         result = Numbers.toHex(number, 4, fromBase);
       }
       break;
     case "HEX":
       if (toBase === "DEC") {
-        result = Numbers.toDecimal(number, 4, fromBase);
+        result = Numbers.toDecimal(number, fromBase);
       } else if (toBase === "BIN") {
         result = Numbers.toBinary(number, 4, fromBase);
       }
