@@ -168,7 +168,7 @@ class Numbers {
         return padBinary("0", k_prec); // Ensure at least k_prec bits for zero
       }
 
-      // Convert the integral part to binary (left side of the input point)
+      // Convert the integral part to binary
       let integralBinary = "";
       let integral = Math.floor(input);
       while (integral > 0) {
@@ -177,11 +177,10 @@ class Numbers {
       }
 
       // Pad the integral binary part to ensure it's a multiple of 4 bits
-      const padLength = Math.ceil(integralBinary.length / 4) * 4;
-      integralBinary = padBinary(integralBinary, padLength);
+      const padLength = Math.ceil(integralBinary.length / k_prec) * k_prec;
 
       // Combine the integral binary part
-      return integralBinary;
+      return padBinary(integralBinary, padLength);
     } else if (fromBase === "FLOAT") {
       // Extract sign, exponent, and mantissa
       const signBit = input < 0 ? 1 : 0;
@@ -193,25 +192,25 @@ class Numbers {
       const biasedExponent = exponent + 127;
 
       // Convert mantissa to binary
-      let mantissaBits = "";
+      let convertedMantissa = "";
       let mBits = 23;
       for (let i = mBits - 1; i >= 0; i--) {
-        mantissaBits +=
+        convertMantissa +=
           (Math.round(normalizedMantissa * Math.pow(2, 23)) >> i) & 1
             ? "1"
             : "0";
       }
 
       // Convert exponent to binary
-      let exponentBits = "";
-      let bits = 8;
-      for (let k = bits - 1; k >= 0; k--) {
-        exponentBits += (biasedExponent >> k) & 1 ? "1" : "0";
+      let convertedExponent = "";
+      let eBits = 8;
+      for (let k = eBits - 1; k >= 0; k--) {
+        convertedExponent += (biasedExponent >> k) & 1 ? "1" : "0";
       }
 
       // Construct IEEE 754 representation
       const ieee754Representation =
-        signBit + " " + exponentBits + " " + mantissaBits;
+        signBit + " " + convertedExponent + " " + convertedMantissa;
 
       return ieee754Representation;
     } else if (fromBase === "HEX") {
@@ -220,37 +219,16 @@ class Numbers {
         // Convert hex to binary by parsing it as an integer and converting to binary string
         let binary = parseInt(input, 16).toString(2);
 
+        // Pad the integral binary part to ensure it's a multiple of 4 bits
+        const padLength = Math.ceil(binary.length / k_prec) * k_prec;
+
         // Ensure the binary string has a length that is a multiple of k_prec bits
-        return padBinary(binary, k_prec);
+        return padBinary(binary, padLength);
       } else {
         return "Invalid hexadecimal input.";
       }
     }
   };
-
-  // static toBinary = (input, k_prec, fromBase) => {
-  //   // Helper function to pad binary numbers
-  //   const padBinary = (binary, length) => binary.padStart(length, "0");
-
-  //   if (fromBase === "DEC" || fromBase === "FLOAT") {
-  //     if (typeof input !== "number" || isNaN(input) || input < 0) {
-  //       return "Invalid input. Please provide a valid input number.";
-  //     }
-
-  //     if (input === 0) {
-  //       return padBinary("0", k_prec); // Ensure at least k_prec bits for zero
-  //     }
-
-  //     // Check if there is a fractional part
-  //     const fractional = input - Math.floor(input);
-
-  //     // Convert the integral part to binary (left side of the input point)
-  //     let integralBinary = "";
-  //     let integral = Math.floor(input);
-  //     while (integral > 0) {
-  //       integralBinary = (integral % 2) + integralBinary;
-  //       integral = Math.floor(integral / 2);
-  //     }
 
   /**
    * Converts a binary string or decimal number to hexadecimal. Takes in a binary string or decimal number for input, the precision for the fractional part (if applicable), and the base of the input.
